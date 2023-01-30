@@ -11,14 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -31,13 +30,10 @@ class _HomePageState extends State<HomePage> {
               child: Stack(
                 children: [
                   CustomPaint(
-                    size: Size(width, (350 * 0.31473214285714285).toDouble()), 
+                    size: Size(width, (350 * 0.31473214285714285).toDouble()),
                     painter: CustomTopPaint(),
                   ),
-                  Positioned(
-                    top: 30,
-                    child: AppName()
-                  )
+                  Positioned(top: 30, child: AppName())
                 ],
               ),
             ),
@@ -45,53 +41,62 @@ class _HomePageState extends State<HomePage> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Discover exactly how old you are and how many days there are until your next birthday.',
+                'Cadastre os aniversáriantes abaixo!',
                 style: TextStyle(
-                  fontSize: 18, 
+                  fontSize: 18,
                   height: 1.5,
-                  fontWeight: FontWeight.w400, 
-                  fontFamily: 'roboto', 
-                  color: textColor ,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'roboto',
+                  color: textColor,
                 ),
               ),
             ),
             Spacer(),
             Container(
-              child: SvgPicture.asset(
-                "assets/gift.svg",
-                width: 120,
-                height: 120,
-                semanticsLabel: 'Acme Logo'
-              ),
+              child: SvgPicture.asset("assets/gift.svg",
+                  width: 120, height: 120, semanticsLabel: 'Acme Logo'),
             ),
             Spacer(),
+            Container(
+              padding: EdgeInsets.all(20.0),
+              child: TextFormField(
+                decoration: InputDecoration(
+                    hintText: 'Nome', border: OutlineInputBorder()),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
             DatePickerField(
-              level: 'Select date of birth',
-              onTap: ()=> _selectDate(context, selectedBithDate, "BirthDate" ),
+              level: 'Selecione a data de nascimento',
+              onTap: () => _selectDate(context, selectedBithDate, "BirthDate"),
               hintText: "${getFormatedDate(selectedBithDate)}",
             ),
-            SizedBox(height: 10,),
-            DatePickerField(
-              level: 'Select today\'s date',
-              onTap: ()=> _selectDate(context, selectedCurrentDate, "CurrentDate"),
-              hintText: "${getFormatedDate(selectedCurrentDate)}",
-            ),
+
+            // DatePickerField(
+            //   level: 'Select today\'s date',
+            //   onTap: () =>
+            //       _selectDate(context, selectedCurrentDate, "CurrentDate"),
+            //   hintText: "${getFormatedDate(selectedCurrentDate)}",
+            // ),
             Container(
               child: Stack(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 80),
                     child: CustomPaint(
-                      size: Size(width, (399 * 0.31473214285714285).toDouble()), 
+                      size: Size(width, (399 * 0.31473214285714285).toDouble()),
                       painter: CustomBottomPaint(),
                     ),
                   ),
                   Positioned(
                     top: 40,
                     child: CustomLargeButton(
-                      buttonLevel: "Calculate",
-                      onPressed: (){
-                        Route route = MaterialPageRoute(builder: (context)=>ResultPage());
+                      buttonLevel: "Cadastrar",
+                      onPressed: () {
+                        Route route = MaterialPageRoute(
+                            builder: (context) => ResultPage());
                         Navigator.push(context, route);
                       },
                     ),
@@ -102,41 +107,52 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Cadastro',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Lista',
+          ),
+        ],
+        selectedItemColor: Color.fromARGB(255, 69, 206, 248),
+      ),
     );
   }
 
-  //This function used for open date picker 
-  Future<void> _selectDate(BuildContext context, DateTime initialDate, String from) async {
-    if(from == 'BirthDate') {
-       final DateTime? pickedBirthDate = await showDatePicker(
+  //This function used for open date picker
+  Future<void> _selectDate(
+      BuildContext context, DateTime initialDate, String from) async {
+    if (from == 'BirthDate') {
+      final DateTime? pickedBirthDate = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(1900),
         lastDate: DateTime(2101),
+        initialEntryMode: DatePickerEntryMode.inputOnly,
+        // locale: const Locale("pt", "BR"),
       );
       if (pickedBirthDate != null && pickedBirthDate != selectedBithDate)
-      setState(() {
-        selectedBithDate = pickedBirthDate;
-      });
-    } 
-    if(from == "CurrentDate"){
+        setState(() {
+          selectedBithDate = pickedBirthDate;
+        });
+    }
+    if (from == "CurrentDate") {
       final DateTime? pickedCurrentDate = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2101),
-      );
+          context: context,
+          initialDate: initialDate,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2101),
+          initialEntryMode: DatePickerEntryMode.inputOnly,
+          locale: Locale("pt", "BR"));
 
       if (pickedCurrentDate != null && pickedCurrentDate != selectedCurrentDate)
-      setState(() {
-        selectedCurrentDate = pickedCurrentDate;
-      });
+        setState(() {
+          selectedCurrentDate = pickedCurrentDate;
+        });
     }
-
   }
 }
-
-
-
-
-

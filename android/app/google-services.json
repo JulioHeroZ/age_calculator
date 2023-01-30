@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "29759211601",
+    "project_id": "aniversariantes-51aa9",
+    "storage_bucket": "aniversariantes-51aa9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29759211601:android:83e4ddb43f4b5b2a6d9070",
+        "android_client_info": {
+          "package_name": "com.example.age_calculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29759211601-j127sqcqmiiae7gnpj1ndacadvij98af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKwog0VmjHFaxBCWd4LYDeLsqLFdrmM_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29759211601-j127sqcqmiiae7gnpj1ndacadvij98af.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

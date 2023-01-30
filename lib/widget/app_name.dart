@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 class AppName extends StatelessWidget {
   const AppName({
@@ -17,12 +15,13 @@ class AppName extends StatelessWidget {
           Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.only(left: 20),
-            child: Text("Age Calculator", 
+            child: Text(
+              "Aniversariantes",
               style: TextStyle(
-              fontSize: 28, 
-              fontWeight: FontWeight.w700, 
-              fontFamily: 'roboto', 
-              color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'roboto',
+                color: Colors.white,
               ),
             ),
           ),
