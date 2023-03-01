@@ -7,8 +7,10 @@ import 'package:age_calculator/widget/custom_bottom_paint.dart';
 import 'package:age_calculator/widget/custom_large_button.dart';
 import 'package:age_calculator/widget/custom_top_paint.dart';
 import 'package:age_calculator/widget/date_picker_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,8 +20,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final nome = TextEditingController();
+  final dataNascimento = TextEditingController();
+  final email = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    CollectionReference clientes =
+        FirebaseFirestore.instance.collection('Clientes');
+
+    Future<Future<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>>
+        addClients() async {
+      // Convertendo a data de nascimento para o formato brasileiro
+      final formatter = DateFormat('dd/MM/yyyy');
+      final dataNascimentoFormated = formatter.parse(dataNascimento.text);
+
+      // Criando um mapa com os dados inseridos pelo usuário
+      Map<String, dynamic> data = {
+        'Nome': nome.text,
+        'Data de Nascimento': dataNascimentoFormated,
+        'Email': email.text,
+      };
+      nome.clear();
+      dataNascimento.clear();
+      email.clear();
+
+      return clientes
+          .add(data)
+          .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Cliente adicionado com sucesso!"))))
+          .catchError((error) => ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Erro ao adicionar cliente: $error"))));
+    }
+
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
@@ -60,18 +93,50 @@ class _HomePageState extends State<HomePage> {
             Container(
               padding: EdgeInsets.all(20.0),
               child: TextFormField(
+                controller: nome,
                 decoration: InputDecoration(
                     hintText: 'Nome', border: OutlineInputBorder()),
+              ),
+            ),
+            SizedBox(
+              height: 1,
+            ),
+            Container(
+              padding: EdgeInsets.all(20.0),
+              child: TextFormField(
+                controller: email,
+                decoration: InputDecoration(
+                    hintText: 'Email', border: OutlineInputBorder()),
               ),
             ),
 
             SizedBox(
               height: 10,
             ),
-            DatePickerField(
-              level: 'Selecione a data de nascimento',
-              onTap: () => _selectDate(context, selectedBithDate, "BirthDate"),
-              hintText: "${getFormatedDate(selectedBithDate)}",
+            Container(
+              padding: EdgeInsets.all(20.0),
+              child: TextFormField(
+                controller: dataNascimento,
+                readOnly: true,
+                onTap: () async {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                    initialEntryMode: DatePickerEntryMode.inputOnly,
+                  );
+                  if (date != null) {
+                    // Formatando a data selecionada no padrão brasileiro
+                    final formatter = DateFormat('dd/MM/yyyy');
+                    dataNascimento.text = formatter.format(date);
+                  }
+                },
+                decoration: InputDecoration(
+                  labelText: 'Data de nascimento',
+                  border: OutlineInputBorder(),
+                ),
+              ),
             ),
 
             // DatePickerField(
@@ -93,13 +158,7 @@ class _HomePageState extends State<HomePage> {
                   Positioned(
                     top: 40,
                     child: CustomLargeButton(
-                      buttonLevel: "Cadastrar",
-                      onPressed: () {
-                        Route route = MaterialPageRoute(
-                            builder: (context) => ResultPage());
-                        Navigator.push(context, route);
-                      },
-                    ),
+                        buttonLevel: "Cadastrar", onPressed: addClients),
                   ),
                 ],
               ),
@@ -121,38 +180,5 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Color.fromARGB(255, 69, 206, 248),
       ),
     );
-  }
-
-  //This function used for open date picker
-  Future<void> _selectDate(
-      BuildContext context, DateTime initialDate, String from) async {
-    if (from == 'BirthDate') {
-      final DateTime? pickedBirthDate = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2101),
-        initialEntryMode: DatePickerEntryMode.inputOnly,
-        // locale: const Locale("pt", "BR"),
-      );
-      if (pickedBirthDate != null && pickedBirthDate != selectedBithDate)
-        setState(() {
-          selectedBithDate = pickedBirthDate;
-        });
-    }
-    if (from == "CurrentDate") {
-      final DateTime? pickedCurrentDate = await showDatePicker(
-          context: context,
-          initialDate: initialDate,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2101),
-          initialEntryMode: DatePickerEntryMode.inputOnly,
-          locale: Locale("pt", "BR"));
-
-      if (pickedCurrentDate != null && pickedCurrentDate != selectedCurrentDate)
-        setState(() {
-          selectedCurrentDate = pickedCurrentDate;
-        });
-    }
   }
 }

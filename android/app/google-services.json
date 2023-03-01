@@ -1,34 +1,113 @@
 {
   "project_info": {
-    "project_number": "29759211601",
-    "project_id": "aniversariantes-51aa9",
-    "storage_bucket": "aniversariantes-51aa9.appspot.com"
+    "project_number": "342349213342",
+    "project_id": "captacao-de-clientes",
+    "storage_bucket": "captacao-de-clientes.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:29759211601:android:83e4ddb43f4b5b2a6d9070",
+        "mobilesdk_app_id": "1:342349213342:android:d426f8aa5cac493f5e158f",
         "android_client_info": {
           "package_name": "com.example.age_calculator"
         }
       },
       "oauth_client": [
         {
-          "client_id": "29759211601-j127sqcqmiiae7gnpj1ndacadvij98af.apps.googleusercontent.com",
+          "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCKwog0VmjHFaxBCWd4LYDeLsqLFdrmM_I"
+          "current_key": "AIzaSyBvplgQu04uN6T-O-yO3PG-RqVIN9VgmSI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "29759211601-j127sqcqmiiae7gnpj1ndacadvij98af.apps.googleusercontent.com",
+              "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "342349213342-kb364lka2hrq5j5aedmlqerhhemp8lvg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ddvipAniversarios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342349213342:android:19a9e92167d25d055e158f",
+        "android_client_info": {
+          "package_name": "com.example.aniversariantes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvplgQu04uN6T-O-yO3PG-RqVIN9VgmSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "342349213342-kb364lka2hrq5j5aedmlqerhhemp8lvg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ddvipAniversarios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342349213342:android:a0d583db82ac4d475e158f",
+        "android_client_info": {
+          "package_name": "com.example.ddvip_aniversarios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvplgQu04uN6T-O-yO3PG-RqVIN9VgmSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342349213342-rv505gbr12sql0nvhku46tuhlt77s6lt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "342349213342-kb364lka2hrq5j5aedmlqerhhemp8lvg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ddvipAniversarios"
+              }
             }
           ]
         }

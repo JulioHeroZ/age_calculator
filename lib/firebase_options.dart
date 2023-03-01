@@ -47,30 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCPu_Ui489IrpHp_1UImq4-NHI8Yr1KSWs',
-    appId: '1:29759211601:web:27955ab1975508186d9070',
-    messagingSenderId: '29759211601',
-    projectId: 'aniversariantes-51aa9',
-    authDomain: 'aniversariantes-51aa9.firebaseapp.com',
-    storageBucket: 'aniversariantes-51aa9.appspot.com',
-    measurementId: 'G-LJF2F0HNZY',
+    apiKey: 'AIzaSyB6DWerZQojXKG9Yz81KhN3EnKRsBqxeWY',
+    appId: '1:342349213342:web:c246b7aab6e336e25e158f',
+    messagingSenderId: '342349213342',
+    projectId: 'captacao-de-clientes',
+    authDomain: 'captacao-de-clientes.firebaseapp.com',
+    storageBucket: 'captacao-de-clientes.appspot.com',
+    measurementId: 'G-02QB0Q8L4H',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCKwog0VmjHFaxBCWd4LYDeLsqLFdrmM_I',
-    appId: '1:29759211601:android:83e4ddb43f4b5b2a6d9070',
-    messagingSenderId: '29759211601',
-    projectId: 'aniversariantes-51aa9',
-    storageBucket: 'aniversariantes-51aa9.appspot.com',
+    apiKey: 'AIzaSyBvplgQu04uN6T-O-yO3PG-RqVIN9VgmSI',
+    appId: '1:342349213342:android:d426f8aa5cac493f5e158f',
+    messagingSenderId: '342349213342',
+    projectId: 'captacao-de-clientes',
+    storageBucket: 'captacao-de-clientes.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDu-yEafGrFPJE1NyvsNW9TYNrUqW6kvag',
-    appId: '1:29759211601:ios:364ebc7d45f799366d9070',
-    messagingSenderId: '29759211601',
-    projectId: 'aniversariantes-51aa9',
-    storageBucket: 'aniversariantes-51aa9.appspot.com',
-    iosClientId: '29759211601-lru4le67o64bq88re5il30a8s0m6fa68.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB6HqOf6ehNhOHnmcDyIVO1aMqHJ3CR34w',
+    appId: '1:342349213342:ios:ebcd50782fa4958c5e158f',
+    messagingSenderId: '342349213342',
+    projectId: 'captacao-de-clientes',
+    storageBucket: 'captacao-de-clientes.appspot.com',
+    iosClientId: '342349213342-b39hoseov65nbtq4u41244j42p4jko82.apps.googleusercontent.com',
     iosBundleId: 'com.example.ageCalculator',
   );
 }
