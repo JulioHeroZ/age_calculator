@@ -26,6 +26,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<BottomNavigationBarItem> bottomNavBarItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.people),
+        label: 'Cadastro',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.search),
+        label: 'Lista',
+      ),
+    ];
+    int currentIndex = 0;
+
     CollectionReference clientes =
         FirebaseFirestore.instance.collection('Clientes');
 
@@ -50,7 +62,7 @@ class _HomePageState extends State<HomePage> {
           .then((value) => ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text("Cliente adicionado com sucesso!"))))
           .catchError((error) => ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Erro ao adicionar cliente: $error"))));
+              SnackBar(content: Text("Erro ao adicionar um cliente: $error"))));
     }
 
     final double width = MediaQuery.of(context).size.width;
@@ -167,17 +179,29 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Cadastro',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Lista',
-          ),
-        ],
-        selectedItemColor: Color.fromARGB(255, 69, 206, 248),
+        items: bottomNavBarItems,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+          // Navegar para a tela correspondente
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ),
+            );
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultPage(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

@@ -1,222 +1,258 @@
-
-
-import 'package:age_calculator/constant/color.dart';
-import 'package:age_calculator/controller/age_calculator.dart';
-import 'package:age_calculator/global/helper_function.dart';
-import 'package:age_calculator/global/utils.dart';
-import 'package:age_calculator/widget/app_name.dart';
-import 'package:age_calculator/widget/custom_bottom_paint.dart';
-import 'package:age_calculator/widget/custom_divider.dart';
-import 'package:age_calculator/widget/custom_large_button.dart';
-import 'package:age_calculator/widget/custom_list_tile.dart';
-import 'package:age_calculator/widget/custom_top_paint.dart';
-import 'package:age_calculator/widget/summary_card_builder.dart';
+import 'package:age_calculator/views/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:time/time.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({ Key? key }) : super(key: key);
+  const ResultPage({Key? key}) : super(key: key);
 
   @override
   _ResultPageState createState() => _ResultPageState();
 }
 
 class _ResultPageState extends State<ResultPage> {
+  CollectionReference clientes =
+      FirebaseFirestore.instance.collection('Clientes');
+  Stream<QuerySnapshot> _getList() {
+    return clientes.orderBy('Data de Nascimento').snapshots();
+  }
+
+  late TextEditingController _searchController;
+  String _searchText = "";
 
   @override
-  Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Stack(
-                children: [
-                  CustomPaint(
-                    size: Size(width, (350*0.31473214285714285).toDouble()), 
-                    painter: CustomTopPaint(),
-                  ),
-                  Positioned(
-                    top: 30,
-                    child: AppName(),
-                  )
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  CustomListTile(
-                    leading: "Date of birth",
-                    trailing: getFormatedDate(selectedBithDate),
-                  ),
-                  SizedBox(height: 20,),
-                  CustomListTile(
-                    leading: "Todays",
-                    trailing: getFormatedDate(selectedCurrentDate),
-                  ),
-                ],
-              )
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(15),
-              height: 120,
-              decoration: BoxDecoration(
-                color: Color(0xff90dce2),
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Age"),
-                          Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).years.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),),
-                              TextSpan(
-                                text: ' Years',
-                                style: TextStyle(fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                           ),
-                          ),
-                          Text("${AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).months.toString()} Months | ${AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).days.toString()} Days"),
-                        ],
-                      ),
-                    ),
-                  ),
-                  CustomDivider(),
-                  Expanded(
-                   child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Next Birthday"),
-                          Text(AgeCalculator.findDayName().toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-                          Text("${AgeCalculator.timeToNextBirthday(selectedBithDate, fromDate: selectedCurrentDate).months} Months | ${AgeCalculator.timeToNextBirthday(selectedBithDate, fromDate: selectedCurrentDate).days} Days"),
-                        ],
-                      ),
-                    ),
-                 )
-                ],
-              )
-            ),
-            Spacer(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Color(0xff90dce2),
-                borderRadius: BorderRadius.circular(10)
-              ),
-              child: Column(
-                children: [
-                  Text("Age in", style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.w700),),
-                  SizedBox(height: 20,),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SummaryCardBuilder(
-                                title: "Years",
-                                subTitle: AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).years.toString(),
-                              ),
-                              SizedBox(height: 20,),
-                              SummaryCardBuilder(
-                                title: "Weeks",
-                                subTitle: (AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).years * 52).toString(),
-                                fontSize: 14,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              SummaryCardBuilder(
-                                title: "Months",
-                                subTitle: (AgeCalculator.age(selectedBithDate, today: selectedCurrentDate).years * 12).toString(),
-                              ),
-                              SizedBox(height: 20,),
-                              SummaryCardBuilder(
-                                title: "Hours",
-                                subTitle: AgeCalculator.hoursBetween(selectedBithDate, selectedCurrentDate).toString(),
-                                fontSize: 14,
-                              ),
-                            ],
-                          ),
-                        ),
-                         Container(
-                          child: Column(
-                            children: [
-                              SummaryCardBuilder(
-                                title: "Days",
-                                subTitle: AgeCalculator.daysBetween(selectedBithDate, selectedCurrentDate).toString(),
-                              ),
-                              SizedBox(height: 20,),
-                              SummaryCardBuilder(
-                                title: "Minutes",
-                                subTitle: AgeCalculator.minutesBetween(selectedBithDate, selectedCurrentDate).toString(),
-                                fontSize: 14,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 80),
-                    child: CustomPaint(
-                      size: Size(width, (399*0.31473214285714285).toDouble()), 
-                      painter: CustomBottomPaint(),
-                    ),
-                  ),
-                  Positioned(
-                    top: 40,
-                    child: CustomLargeButton(
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                      buttonLevel: "Re-Calculate",
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> sendBirthdayEmail(
+      List<Map<String, dynamic>> todayBirthdays) async {
+    // Configurações do servidor SMTP do Gmail
+    final smtpServer =
+        gmail('juliohero64@gmail.com', 'Julio1065671133!@36414078');
+
+    // Cria a mensagem de email
+    final message = Message()
+      ..from = Address('juliohero64@gmail.com', 'Júlio')
+      ..recipients.addAll([
+        'juliohero64@gmail.com'
+      ]) // Adicione aqui os emails dos destinatários
+      ..subject = 'Aniversariantes de hoje'
+      ..html = '''
+      <h1>Aniversariantes de hoje:</h1>
+      ${todayBirthdays.map((b) => '<p>${b['Nome']} - ${DateFormat('dd/MM/yyyy').format((b['Data de Nascimento'] as Timestamp).toDate())}</p>').join('\n')}
+    ''';
+
+    // Tenta enviar o email
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Email enviado: ${sendReport.toString()}');
+    } on MailerException catch (e) {
+      print('Erro ao enviar email: $e');
+    }
+  }
+
+  Future<void> main() async {
+    // Define a hora em que o email será enviado (às 8h da manhã)
+    final scheduledTime = DateTime(8, 0, 0);
+
+    // Aguarda até que seja o horário agendado
+    while (true) {
+      final now = DateTime.now();
+      if (now.hour >= scheduledTime.hour &&
+          now.minute >= scheduledTime.minute) {
+        break;
+      }
+      await Future.delayed(Duration(minutes: 1));
+    }
+
+    // Envia o email
+    await checkAndSendEmail();
+
+    // Aguarda um dia e executa novamente
+    await Future.delayed(Duration(days: 1));
+    main(); // chama a função main novamente para agendar o envio do próximo email
+  }
+
+// Define a função checkAndSendEmail que verifica se há novas mensagens e envia um email
+  Future<void> checkAndSendEmail() async {
+    final newMessages = await fetchNewMessages();
+    if (newMessages.isNotEmpty) {
+      await sendEmail(newMessages);
+    }
+  }
+
+// Define a função fetchNewMessages que busca novas mensagens
+  Future<List<Message>> fetchNewMessages() async {
+// Simula uma busca por novas mensagens em um servidor de email
+    await Future.delayed(Duration(seconds: 5));
+
+// Retorna uma lista vazia como não há novas mensagens
+    return [];
+  }
+
+// Define a função sendEmail que envia um email
+  Future<void> sendEmail(List<Message> messages) async {
+// Simula o envio de um email
+    await Future.delayed(Duration(seconds: 2));
+    print('Email enviado com sucesso!');
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _searchController,
+        decoration: InputDecoration(
+          hintText: 'Pesquisar...',
+          border: InputBorder.none,
+          prefixIcon: Icon(Icons.search),
         ),
+        onChanged: (value) {
+          setState(() {
+            _searchText = value;
+          });
+        },
       ),
     );
   }
+
+  Widget build(BuildContext context) {
+    List<BottomNavigationBarItem> bottomNavBarItems = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.people),
+        label: 'Cadastro',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.search),
+        label: 'Lista',
+      ),
+    ];
+    int currentIndex = 1;
+
+    final double width = MediaQuery.of(context).size.width;
+    DateTime today = DateTime.now();
+
+    return Scaffold(
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: _buildSearchBar(),
+            ),
+            Expanded(
+              child: Container(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _getList(),
+                  builder: (_, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        if (snapshot.data!.docs.isEmpty) {
+                          return Center(
+                            child: Text('Não possui dados'),
+                          );
+                        }
+                        final filteredDocs = snapshot.data!.docs.where((doc) {
+                          DateTime dateOfBirth =
+                              (doc['Data de Nascimento'] as Timestamp).toDate();
+                          return dateOfBirth.month == today.month &&
+                              dateOfBirth.day == today.day;
+                        }).toList();
+                        if (filteredDocs.isEmpty) {
+                          return Center(
+                            child: Text('Não há aniversariantes hoje'),
+                          );
+                        }
+
+                        // Ordenar a lista por data de nascimento
+                        filteredDocs.sort((a, b) {
+                          DateTime dateOfBirthA =
+                              (a['Data de Nascimento'] as Timestamp).toDate();
+                          DateTime dateOfBirthB =
+                              (b['Data de Nascimento'] as Timestamp).toDate();
+                          return dateOfBirthA.compareTo(dateOfBirthB);
+                        });
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: filteredDocs.length,
+                          itemBuilder: (_, index) {
+                            final DocumentSnapshot doc = filteredDocs[index];
+                            return ListTile(
+                              title: Text(doc['Nome']),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(doc['Email']),
+                                  Text(
+                                    DateFormat('dd/MM/yyyy').format(
+                                      (doc['Data de Nascimento'] as Timestamp)
+                                          .toDate(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: bottomNavBarItems,
+          currentIndex: currentIndex,
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+            // Navegar para a tela correspondente
+            if (index == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            } else if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultPage(),
+                ),
+              );
+            }
+          },
+        ));
+  }
 }
-
-
-
-
-
-
-

@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -54,17 +54,14 @@ flutter {
     source '../..'
 }
 
+
+
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-plugins {
-  id 'com.android.application'
 
-  // Add the Google services Gradle plugin
-  id 'com.google.gms.google-services'
-
-}
 
 dependencies {
   // Import the Firebase BoM
