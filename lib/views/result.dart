@@ -183,7 +183,10 @@ class _ResultPageState extends State<ResultPage> {
                           DateTime dateOfBirth =
                               (doc['Data de Nascimento'] as Timestamp).toDate();
                           return dateOfBirth.month == today.month &&
-                              dateOfBirth.day == today.day;
+                              dateOfBirth.day == today.day &&
+                              (doc['Nome'] as String)
+                                  .toLowerCase()
+                                  .contains(_searchText.toLowerCase());
                         }).toList();
                         if (filteredDocs.isEmpty) {
                           return Center(
