@@ -34,7 +34,6 @@ dependencies:
   localization: ^2.1.0
   firebase_core: ^2.4.1
   cloud_firestore:
-  flutter_localization: ^0.1.10
   mailer: ^6.0.0
   time: ^2.1.3
 

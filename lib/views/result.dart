@@ -151,86 +151,89 @@ class _ResultPageState extends State<ResultPage> {
     ];
     int currentIndex = 1;
 
-    final double width = MediaQuery.of(context).size.width;
     DateTime today = DateTime.now();
 
     return Scaffold(
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: _buildSearchBar(),
-            ),
-            Expanded(
-              child: Container(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _getList(),
-                  builder: (_, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      case ConnectionState.active:
-                      case ConnectionState.done:
-                        if (snapshot.data!.docs.isEmpty) {
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: _buildSearchBar(),
+              ),
+              Expanded(
+                child: Container(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _getList(),
+                    builder: (_, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
                           return Center(
-                            child: Text('Não possui dados'),
+                            child: CircularProgressIndicator(),
                           );
-                        }
-                        final filteredDocs = snapshot.data!.docs.where((doc) {
-                          DateTime dateOfBirth =
-                              (doc['Data de Nascimento'] as Timestamp).toDate();
-                          return dateOfBirth.month == today.month &&
-                              dateOfBirth.day == today.day &&
-                              (doc['Nome'] as String)
-                                  .toLowerCase()
-                                  .contains(_searchText.toLowerCase());
-                        }).toList();
-                        if (filteredDocs.isEmpty) {
-                          return Center(
-                            child: Text('Não há aniversariantes hoje'),
-                          );
-                        }
-
-                        // Ordenar a lista por data de nascimento
-                        filteredDocs.sort((a, b) {
-                          DateTime dateOfBirthA =
-                              (a['Data de Nascimento'] as Timestamp).toDate();
-                          DateTime dateOfBirthB =
-                              (b['Data de Nascimento'] as Timestamp).toDate();
-                          return dateOfBirthA.compareTo(dateOfBirthB);
-                        });
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: filteredDocs.length,
-                          itemBuilder: (_, index) {
-                            final DocumentSnapshot doc = filteredDocs[index];
-                            return ListTile(
-                              title: Text(doc['Nome']),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(doc['Email']),
-                                  Text(
-                                    DateFormat('dd/MM/yyyy').format(
-                                      (doc['Data de Nascimento'] as Timestamp)
-                                          .toDate(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                        case ConnectionState.active:
+                        case ConnectionState.done:
+                          if (snapshot.data!.docs.isEmpty) {
+                            return Center(
+                              child: Text('Não possui dados'),
                             );
-                          },
-                        );
-                    }
-                  },
+                          }
+                          final filteredDocs = snapshot.data!.docs.where((doc) {
+                            DateTime dateOfBirth =
+                                (doc['Data de Nascimento'] as Timestamp)
+                                    .toDate();
+                            return dateOfBirth.month == today.month &&
+                                dateOfBirth.day == today.day &&
+                                (doc['Nome'] as String)
+                                    .toLowerCase()
+                                    .contains(_searchText.toLowerCase());
+                          }).toList();
+                          if (filteredDocs.isEmpty) {
+                            return Center(
+                              child: Text('Não há aniversariantes hoje'),
+                            );
+                          }
+
+                          // Ordenar a lista por data de nascimento
+                          filteredDocs.sort((a, b) {
+                            DateTime dateOfBirthA =
+                                (a['Data de Nascimento'] as Timestamp).toDate();
+                            DateTime dateOfBirthB =
+                                (b['Data de Nascimento'] as Timestamp).toDate();
+                            return dateOfBirthA.compareTo(dateOfBirthB);
+                          });
+                          return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: filteredDocs.length,
+                            itemBuilder: (_, index) {
+                              final DocumentSnapshot doc = filteredDocs[index];
+                              return ListTile(
+                                title: Text(doc['Nome']),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(doc['Email']),
+                                    Text(
+                                      DateFormat('dd/MM/yyyy').format(
+                                        (doc['Data de Nascimento'] as Timestamp)
+                                            .toDate(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                      }
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: bottomNavBarItems,

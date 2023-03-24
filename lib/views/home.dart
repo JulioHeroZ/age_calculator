@@ -1,12 +1,9 @@
 import 'package:age_calculator/constant/color.dart';
-import 'package:age_calculator/global/helper_function.dart';
-import 'package:age_calculator/global/utils.dart';
 import 'package:age_calculator/views/result.dart';
 import 'package:age_calculator/widget/app_name.dart';
 import 'package:age_calculator/widget/custom_bottom_paint.dart';
 import 'package:age_calculator/widget/custom_large_button.dart';
 import 'package:age_calculator/widget/custom_top_paint.dart';
-import 'package:age_calculator/widget/date_picker_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,115 +64,119 @@ class _HomePageState extends State<HomePage> {
 
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Stack(
-                children: [
-                  CustomPaint(
-                    size: Size(width, (350 * 0.31473214285714285).toDouble()),
-                    painter: CustomTopPaint(),
-                  ),
-                  Positioned(top: 30, child: AppName())
-                ],
-              ),
-            ),
-            Spacer(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'Cadastre os aniversáriantes abaixo!',
-                style: TextStyle(
-                  fontSize: 18,
-                  height: 1.5,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'roboto',
-                  color: textColor,
-                ),
-              ),
-            ),
-            Spacer(),
-            Container(
-              child: SvgPicture.asset("assets/gift.svg",
-                  width: 120, height: 120, semanticsLabel: 'Acme Logo'),
-            ),
-            Spacer(),
-            Container(
-              padding: EdgeInsets.all(20.0),
-              child: TextFormField(
-                controller: nome,
-                decoration: InputDecoration(
-                    hintText: 'Nome', border: OutlineInputBorder()),
-              ),
-            ),
-            SizedBox(
-              height: 1,
-            ),
-            Container(
-              padding: EdgeInsets.all(20.0),
-              child: TextFormField(
-                controller: email,
-                decoration: InputDecoration(
-                    hintText: 'Email', border: OutlineInputBorder()),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              padding: EdgeInsets.all(20.0),
-              child: TextFormField(
-                controller: dataNascimento,
-                readOnly: true,
-                onTap: () async {
-                  final date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                    initialEntryMode: DatePickerEntryMode.inputOnly,
-                  );
-                  if (date != null) {
-                    // Formatando a data selecionada no padrão brasileiro
-                    final formatter = DateFormat('dd/MM/yyyy');
-                    dataNascimento.text = formatter.format(date);
-                  }
-                },
-                decoration: InputDecoration(
-                  labelText: 'Data de nascimento',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-
-            // DatePickerField(
-            //   level: 'Select today\'s date',
-            //   onTap: () =>
-            //       _selectDate(context, selectedCurrentDate, "CurrentDate"),
-            //   hintText: "${getFormatedDate(selectedCurrentDate)}",
-            // ),
-            Container(
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 80),
-                    child: CustomPaint(
-                      size: Size(width, (399 * 0.31473214285714285).toDouble()),
-                      painter: CustomBottomPaint(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Stack(
+                  children: [
+                    CustomPaint(
+                      size: Size(width, (350 * 0.31473214285714285).toDouble()),
+                      painter: CustomTopPaint(),
                     ),
-                  ),
-                  Positioned(
-                    top: 40,
-                    child: CustomLargeButton(
-                        buttonLevel: "Cadastrar", onPressed: addClients),
-                  ),
-                ],
+                    Positioned(top: 30, child: AppName())
+                  ],
+                ),
               ),
-            )
-          ],
+              Spacer(),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Cadastre os aniversáriantes abaixo!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    height: 1.5,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'roboto',
+                    color: textColor,
+                  ),
+                ),
+              ),
+              Spacer(),
+              Container(
+                child: SvgPicture.asset("assets/gift.svg",
+                    width: 120, height: 120, semanticsLabel: 'Acme Logo'),
+              ),
+              Spacer(),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: TextFormField(
+                  controller: nome,
+                  decoration: InputDecoration(
+                      hintText: 'Nome', border: OutlineInputBorder()),
+                ),
+              ),
+              SizedBox(
+                height: 1,
+              ),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: TextFormField(
+                  controller: email,
+                  decoration: InputDecoration(
+                      hintText: 'Email', border: OutlineInputBorder()),
+                ),
+              ),
+
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: TextFormField(
+                  controller: dataNascimento,
+                  readOnly: true,
+                  onTap: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                      initialEntryMode: DatePickerEntryMode.inputOnly,
+                    );
+                    if (date != null) {
+                      // Formatando a data selecionada no padrão brasileiro
+                      final formatter = DateFormat('dd/MM/yyyy');
+                      dataNascimento.text = formatter.format(date);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Data de nascimento',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+
+              // DatePickerField(
+              //   level: 'Select today\'s date',
+              //   onTap: () =>
+              //       _selectDate(context, selectedCurrentDate, "CurrentDate"),
+              //   hintText: "${getFormatedDate(selectedCurrentDate)}",
+              // ),
+              Container(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 80),
+                      child: CustomPaint(
+                        size:
+                            Size(width, (399 * 0.31473214285714285).toDouble()),
+                        painter: CustomBottomPaint(),
+                      ),
+                    ),
+                    Positioned(
+                      top: 40,
+                      child: CustomLargeButton(
+                          buttonLevel: "Cadastrar", onPressed: addClients),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
