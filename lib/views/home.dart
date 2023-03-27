@@ -6,8 +6,11 @@ import 'package:age_calculator/widget/custom_large_button.dart';
 import 'package:age_calculator/widget/custom_top_paint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +26,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     List<BottomNavigationBarItem> bottomNavBarItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.people),
@@ -130,6 +137,9 @@ class _HomePageState extends State<HomePage> {
                   controller: dataNascimento,
                   readOnly: true,
                   onTap: () async {
+                    Intl.defaultLocale = 'pt_BR';
+                    await initializeDateFormatting('pt_BR', null);
+                    WidgetsFlutterBinding.ensureInitialized();
                     final date = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
@@ -139,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                     );
                     if (date != null) {
                       // Formatando a data selecionada no padrão brasileiro
-                      final formatter = DateFormat('dd/MM/yyyy');
+                      final formatter = DateFormat('dd/MM/yyyy', 'pt_BR');
                       dataNascimento.text = formatter.format(date);
                     }
                   },

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Aniversariantes DVIP',
+      title: 'Aniversariantes',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         colorScheme: ColorScheme.light(

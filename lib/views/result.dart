@@ -1,10 +1,16 @@
 import 'package:age_calculator/views/home.dart';
+import 'package:age_calculator/widget/custom_bottom_paint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:time/time.dart';
+
+import '../widget/app_name.dart';
+import '../widget/custom_large_button.dart';
+import '../widget/custom_top_paint.dart';
+import 'editscreen.dart';
 
 class ResultPage extends StatefulWidget {
   const ResultPage({Key? key}) : super(key: key);
@@ -108,6 +114,10 @@ class _ResultPageState extends State<ResultPage> {
     print('Email enviado com sucesso!');
   }
 
+  Future<void> _removeCliente(DocumentSnapshot document) async {
+    await clientes.doc(document.id).delete();
+  }
+
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
@@ -139,6 +149,7 @@ class _ResultPageState extends State<ResultPage> {
   }
 
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     List<BottomNavigationBarItem> bottomNavBarItems = [
       BottomNavigationBarItem(
         icon: Icon(Icons.people),
@@ -158,6 +169,17 @@ class _ResultPageState extends State<ResultPage> {
         body: SafeArea(
           child: Column(
             children: [
+              Container(
+                child: Stack(
+                  children: [
+                    CustomPaint(
+                      size: Size(width, (350 * 0.31473214285714285).toDouble()),
+                      painter: CustomTopPaint(),
+                    ),
+                    Positioned(top: 30, child: AppName())
+                  ],
+                ),
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: _buildSearchBar(),
@@ -210,19 +232,69 @@ class _ResultPageState extends State<ResultPage> {
                             itemCount: filteredDocs.length,
                             itemBuilder: (_, index) {
                               final DocumentSnapshot doc = filteredDocs[index];
-                              return ListTile(
-                                title: Text(doc['Nome']),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(doc['Email']),
-                                    Text(
-                                      DateFormat('dd/MM/yyyy').format(
-                                        (doc['Data de Nascimento'] as Timestamp)
-                                            .toDate(),
+                              return Card(
+                                margin: const EdgeInsets.all(8),
+                                child: ListTile(
+                                  title: Text(doc['Nome']),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(doc['Email']),
+                                      Text(
+                                        DateFormat('dd/MM/yyyy').format(
+                                          (doc['Data de Nascimento']
+                                                  as Timestamp)
+                                              .toDate(),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.edit),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditScreen(document: doc),
+                                              ));
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () async {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                              title: Text('Remover cliente'),
+                                              content: Text(
+                                                  'Tem certeza que deseja remover este cliente?'),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text('Cancelar'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                ),
+                                                TextButton(
+                                                  child: Text('Remover'),
+                                                  onPressed: () async {
+                                                    await clientes
+                                                        .doc(doc.id)
+                                                        .delete();
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -232,6 +304,20 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
               ),
+              Container(
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 80),
+                      child: CustomPaint(
+                        size:
+                            Size(width, (263 * 0.31473214285714285).toDouble()),
+                        painter: CustomBottomPaint(),
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
